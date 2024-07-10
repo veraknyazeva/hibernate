@@ -1,67 +1,46 @@
 package entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Objects;
 
 @Entity
+@Table(name = "priority", schema = "todolist", catalog = "postgres")
+@NoArgsConstructor
+@Getter
+@Setter
 public class Priority {
-    @Basic
-    @Column(name = "title", nullable = false, length = -1)
+
     private String title;
-    @Basic
-    @Column(name = "color", nullable = false, length = -1)
+
     private String color;
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserData userData;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Priority priority = (Priority) o;
-        return Objects.equals(title, priority.title) && Objects.equals(color, priority.color) && Objects.equals(id, priority.id) && Objects.equals(userId, priority.userId);
+        return Objects.equals(id, priority.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, color, id, userId);
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }

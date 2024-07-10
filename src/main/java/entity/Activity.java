@@ -1,17 +1,12 @@
 package entity;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Objects;
 
 @Entity
+@Table(name = "activity", schema = "todolist", catalog = "postgres")
 @Setter
 @Getter
 @AllArgsConstructor
@@ -19,30 +14,29 @@ import java.util.Objects;
 public class Activity {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Basic
-    @Column(name = "uuid", nullable = false, length = -1)
+
+    @Column(updatable = false)
     private String uuid;
-    @Basic
-    @Column(name = "activated", nullable = false)
-    private Short activated;
-    @Basic
-    @Column(name = "user_id", nullable = true)
-    private Long userId;
 
+    @Convert(converter = org.hibernate.type.NumericBooleanConverter.class) //для автоматической конвертации в true false
+    private boolean activated;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserData userData;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Activity activity = (Activity) o;
-        return Objects.equals(id, activity.id) && Objects.equals(uuid, activity.uuid) && Objects.equals(activated, activity.activated) && Objects.equals(userId, activity.userId);
+        return Objects.equals(id, activity.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid, activated, userId);
+        return Objects.hash(id);
     }
 }
