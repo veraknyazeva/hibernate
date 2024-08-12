@@ -16,8 +16,18 @@ repositories {
 }
 
 dependencies {
+    //ядро hibernate
     implementation 'org.hibernate:hibernate-core:6.5.2.Final'
+
+    //JDBC драйвер
     implementation 'org.postgresql:postgresql:42.7.3'
+
+    //кэш 2го уровня
+    implementation 'org.hibernate.orm:hibernate-jcache:6.5.2.Final' //реализация API
+    implementation 'org.ehcache:ehcache:3.10.8' //API из JSR
+
+
+    //lombok
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
 }
